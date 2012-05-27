@@ -38,6 +38,7 @@ module Spree
     after_create :add_properties_and_option_types_from_prototype
     after_create :build_variants_from_option_values_hash, :if => :option_values_hash
     before_save :recalculate_count_on_hand
+    before_save :parse_permalink
     after_save :save_master
     after_save :set_master_on_hand_to_zero_when_product_has_variants
 
@@ -212,6 +213,9 @@ module Spree
     end
 
     private
+      def parse_permalink
+        self.permalink = self[:permalink].parameterize
+      end
 
       # Builds variants from a hash of option types & values
       def build_variants_from_option_values_hash
